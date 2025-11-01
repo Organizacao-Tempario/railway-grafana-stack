@@ -26,10 +26,12 @@ datasources:
     orgId: 1
     uid: grafana_prometheus
     url: $PROMETHEUS_INTERNAL_URL
-    user:
+    user: 
     database:
-    basicAuth:
-    basicAuthUser:
+    basicAuth: true
+    basicAuthUser: $PROMETHEUS_WEB_USER
+    secureJsonData:
+      basicAuthPassword: $PROMETHEUS_WEB_PASSWORD
     withCredentials:
     isDefault: false
   - name: Tempo
