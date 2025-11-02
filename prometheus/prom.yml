@@ -6,31 +6,31 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-- job_name: 'Tempario-mongo-metrics'
-    scrape_interval: 10s
-    metrics_path: /metrics
-    scheme : https
-    basic_auth:
-      username: prom_user_65a95404a5a98706c5538f05
-      password: OkkGTyoPf7OqR6jE
-    http_sd_configs:
-      - url: https://cloud.mongodb.com/prometheus/v1.0/groups/65a95404a5a98706c5538f05/discovery
-        refresh_interval: 60s
-        basic_auth:
-          username: prom_user_65a95404a5a98706c5538f05
-          password: OkkGTyoPf7OqR6jE
-
-  - job_name: 'rabbitmq'
-    scrape_interval: 15s
-    static_configs:
-      - targets: ['rabbitmq-wivs.railway.internal:15692']
-    metrics_path: '/metrics'
-    scheme: 'http'
-
-  - job_name: 'rabbitmq-queue-metrics'
-    scrape_interval: 15s
-    static_configs:
-      - targets: ['rabbitmq-wivs.railway.internal:15692']
-    metrics_path: '/metrics/detailed'
-    params:
-      'family': ['queue_coarse_metrics', 'queue_consumer_count']
+  - job_name: 'Tempario-mongo-metrics'
+      scrape_interval: 10s
+      metrics_path: /metrics
+      scheme : https
+      basic_auth:
+        username: prom_user_65a95404a5a98706c5538f05
+        password: OkkGTyoPf7OqR6jE
+      http_sd_configs:
+        - url: https://cloud.mongodb.com/prometheus/v1.0/groups/65a95404a5a98706c5538f05/discovery
+          refresh_interval: 60s
+          basic_auth:
+            username: prom_user_65a95404a5a98706c5538f05
+            password: OkkGTyoPf7OqR6jE
+  
+    - job_name: 'rabbitmq'
+      scrape_interval: 15s
+      static_configs:
+        - targets: ['rabbitmq-wivs.railway.internal:15692']
+      metrics_path: '/metrics'
+      scheme: 'http'
+  
+    - job_name: 'rabbitmq-queue-metrics'
+      scrape_interval: 15s
+      static_configs:
+        - targets: ['rabbitmq-wivs.railway.internal:15692']
+      metrics_path: '/metrics/detailed'
+      params:
+        'family': ['queue_coarse_metrics', 'queue_consumer_count']
