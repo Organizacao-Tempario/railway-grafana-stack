@@ -53,3 +53,12 @@ scrape_configs:
     params:
       'family': ['queue_coarse_metrics', 'queue_consumer_count']
     scheme: 'http'
+
+  - job_name: 'evolution-api'
+    static_configs:
+      - targets: ['evolution-api.tempar.io']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    basic_auth:
+      username: 'evolution-api'
+      password: '50tF7z!2@N(,drTz'
