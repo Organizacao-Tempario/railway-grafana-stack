@@ -6,31 +6,50 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
+  # - job_name: 'example_api'
+  #   scheme: http
+  #   static_configs:
+  #     - targets: ['example_api:9091']
+
+  #  ? TODO: add your services here
+  # - job_name: 'your-job-name'
+  #   scheme: https
+  #   static_configs:
+  #     - targets: ['URL_GOES_HERE']
+  #   basic_auth:
+  #     username: HTTP_AUTH_USERNAME_GOES_HERE
+  #     password: HTTP_AUTH_PASSWORD_GOES_HERE
+  - job_name: 'postgres_exporter'
+    static_configs:
+      - targets:
+        - postgres-metrics-collector-fjiy.railway.internal:9187
+
   - job_name: 'Tempario-mongo-metrics'
-      scrape_interval: 10s
-      metrics_path: /metrics
-      scheme : https
-      basic_auth:
-        username: prom_user_65a95404a5a98706c5538f05
-        password: OkkGTyoPf7OqR6jE
-      http_sd_configs:
-        - url: https://cloud.mongodb.com/prometheus/v1.0/groups/65a95404a5a98706c5538f05/discovery
-          refresh_interval: 60s
-          basic_auth:
-            username: prom_user_65a95404a5a98706c5538f05
-            password: OkkGTyoPf7OqR6jE
-  
-    - job_name: 'rabbitmq'
-      scrape_interval: 15s
-      static_configs:
-        - targets: ['rabbitmq-wivs.railway.internal:15692']
-      metrics_path: '/metrics'
-      scheme: 'http'
-  
-    - job_name: 'rabbitmq-queue-metrics'
-      scrape_interval: 15s
-      static_configs:
-        - targets: ['rabbitmq-wivs.railway.internal:15692']
-      metrics_path: '/metrics/detailed'
-      params:
-        'family': ['queue_coarse_metrics', 'queue_consumer_count']
+    scrape_interval: 10s
+    metrics_path: /metrics
+    scheme : https
+    basic_auth:
+      username: prom_user_65a95404a5a98706c5538f05
+      password: OkkGTyoPf7OqR6jE
+    http_sd_configs:
+      - url: https://cloud.mongodb.com/prometheus/v1.0/groups/65a95404a5a98706c5538f05/discovery
+        refresh_interval: 60s
+        basic_auth:
+          username: prom_user_65a95404a5a98706c5538f05
+          password: OkkGTyoPf7OqR6jE
+
+  - job_name: 'rabbitmq'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['rabbitmq-wivs.railway.internal:15692']
+    metrics_path: '/metrics'
+    scheme: 'http'
+
+  - job_name: 'rabbitmq-queue-metrics'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['rabbitmq-wivs.railway.internal:15692']
+    metrics_path: '/metrics/detailed'
+    params:
+      'family': ['queue_coarse_metrics', 'queue_consumer_count']
+    scheme: 'http'
