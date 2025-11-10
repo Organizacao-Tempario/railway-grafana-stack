@@ -5,6 +5,9 @@ scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
+    basic_auth:
+      username: tempario
+      password: 50tF7z!2@N(,drTz#yxQ[_I$
 
   - job_name: 'postgres_exporter'
     static_configs:
