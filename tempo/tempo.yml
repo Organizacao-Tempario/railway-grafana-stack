@@ -1,15 +1,17 @@
+# Option C: backend_scheduler + backend_worker (no "compactor:" block)
+
+target: all
+
 server:
   http_listen_port: 3200
+  grpc_listen_port: 9095
 
-storage:
-  trace:
-    backend: local
-    local:
-      path: /var/tempo/traces
+# Rings default to memberlist unless you use a different kvstore.
+memberlist: {}
 
 distributor:
   log_received_spans:
-        enabled: true
+    enabled: true
   receivers:
     otlp:
       protocols:
@@ -17,3 +19,71 @@ distributor:
           endpoint: "0.0.0.0:4317"
         http:
           endpoint: "0.0.0.0:4318"
+
+ingester:
+  max_block_duration: 5m
+  lifecycler:
+    ring:
+      kvstore:
+        store: memberlist
+      replication_factor: 1
+
+storage:
+  trace:
+    backend: local
+    wal:
+      path: /var/tempo/wal
+    local:
+      path: /var/tempo/blocks
+
+# Schedules/tracks compaction + retention jobs. Only ONE scheduler should run.
+backend_scheduler:
+  local_work_path: /var/tempo
+  maintenance_interval: 1m
+  backend_flush_interval: 1m
+  job_timeout: 15s
+
+  provider:
+    retention:
+      interval: 1h
+    compaction:
+      measure_interval: 1m
+      # Compaction settings (shared compaction config block)
+      compaction:
+        compaction_window: 1h
+        block_retention: 48h
+        compacted_block_retention: 1h
+
+# gRPC client used by backend_worker to connect to backend_scheduler
+backend_scheduler_client:
+  grpc_client_config:
+    grpc_compression: snappy
+    max_recv_msg_size: 104857600
+    max_send_msg_size: 104857600
+    connect_timeout: 5s
+    connect_backoff_base_delay: 1s
+    connect_backoff_max_delay: 5s
+    backoff_config:
+      min_period: 100ms
+      max_period: 10s
+      max_retries: 10
+    tls_enabled: false
+
+backend_worker:
+  # If scheduler is in the same Tempo process, localhost works.
+  backend_scheduler_addr: "127.0.0.1:9095"
+
+  backoff:
+    min_period: 100ms
+    max_period: 1m
+    max_retries: 0
+
+  ring:
+    kvstore:
+      store: memberlist
+
+  # Worker also needs compaction settings (same compaction block)
+  compaction:
+    compaction_window: 1h
+    block_retention: 48h
+    compacted_block_retention: 1h
