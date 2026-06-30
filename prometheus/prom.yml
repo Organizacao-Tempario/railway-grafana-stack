@@ -12,8 +12,7 @@ scrape_configs:
   - job_name: 'postgres_exporter'
     scrape_interval: 15s
     static_configs:
-      - targets:
-        - postgres-metrics-collector.railway.internal:9187
+      - targets: ['postgres-metrics-collector.railway.internal:9187']
     
   - job_name: 'Tempario-mongo-metrics'
     scrape_interval: 10s
