@@ -8,6 +8,13 @@ scrape_configs:
     basic_auth:
       username: tempario
       password: 50tF7z!2@N(,drTz#yxQ[_I$
+      
+  - job_name: 'kafka_exporter'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['kafka-exporter.railway.internal:9308']
+    metrics_path: /metrics
+    scheme : http
 
   - job_name: 'postgres_exporter'
     scrape_interval: 15s
