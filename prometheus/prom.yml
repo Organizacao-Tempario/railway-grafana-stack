@@ -27,12 +27,3 @@ scrape_configs:
         basic_auth:
           username: prom_user_65a95404a5a98706c5538f05
           password: OkkGTyoPf7OqR6jE
-
-  - job_name: 'evolution-api'
-    static_configs:
-      - targets: ['evolution-api.tempar.io']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-    basic_auth:
-      username: 'evolution-api'
-      password: '50tF7z!2@N(,drTz'
